@@ -28,7 +28,7 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/:date?", (req, res) => {
 
-  if(req.params.date === null || req.params.date === ""){
+  if(req.params.date === null || req.params.date === undefined || req.params.date.trim() === ""){
     const datetime = new Date();
     const unix = datetime.getTime();
     const utc = datetime.toUTCString();
@@ -37,7 +37,7 @@ app.get("/api/:date?", (req, res) => {
   
   const datetime = new Date(req.params.date);;
 
-  if(isNaN(datetime)) {
+  if(isNaN(req.params.date)) {
     return res.status(400).json({ error: "Invalid Date" });
   }
   
