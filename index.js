@@ -34,15 +34,15 @@ app.get("/api/:date?", (req, res) => {
     const utc = datetime.toUTCString();
     return res.json({ unix, utc });
   }
+  let datetime;
+  //Regex YYYY-MM-DD && Unix em milissegundos de 13 digitos
+  if (/^\d{4}-\d{2}-\d{2}$/.test(req.params.date))
+    datetime = new Date(req.params.date);
 
-  let regex = /^\d{4}-\d{2}-\d{2}$/;//YYYY-MM-DD
-  if (!regex.test(req.params.date)) {
-    regex = /^\d{13}$/;//Unix 
-    if (!regex.test(req.params.date))
-      return res.status(400).json({ error: "Invalid Date" });
-  }
+  else if (/^\d{13}$/.test(req.params.date))
+    datetime = new Date(parseInt(req.params.date));
 
-  const datetime = new Date(req.params.date/1);
+  else return res.status(400).json({ error: "Invalid Date" });
 
   const unix = datetime.getTime();
   const utc = datetime.toUTCString();
