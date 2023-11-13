@@ -35,12 +35,12 @@ app.get("/api/:date?", (req, res) => {
     return res.json({unix, utc});
   }
   
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  if(!regex.test(req.params.date))
+    return res.status(400).json({ error: "Invalid Date" });
+  
   const datetime = new Date(req.params.date);;
 
-  if(isNaN(req.params.date)) {
-    return res.status(400).json({ error: "Invalid Date" });
-  }
-  
   const unix = datetime.getTime();
   const utc = datetime.toUTCString();
 
